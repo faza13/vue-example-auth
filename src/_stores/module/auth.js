@@ -1,4 +1,5 @@
 import Axios from "axios";
+import * as firebase from 'firebase/app';
 
 const states = {
   loggingIn: false,
@@ -14,17 +15,37 @@ const actions = {
   doLogin({commit}, loginData) {
 
     return new Promise((resolve, reject) => {
-      Axios.post('https://reqres.in/api/login', {
-        ...loginData
+
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION)
+      .then(function() {
+
+        resolve (firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password));
       })
-      .then((result) => {
-        commit('loginStop', null);
-        resolve(result);
-      })
-      .catch( error => {
-        commit('loginStop', error.response.data.error);
+      .catch((error) => {
         reject(error);
-      })
+      });
+
+      // firebase.auth().signInWithEmailAndPassword(loginData.email, loginData.password)
+      //   .then(user => {
+      //     commit('loginStart', null);
+      //     resolve(user)
+      //   })
+      //   .catch(err =>{
+      //     commit('loginStop', err);
+      //     reject(err)
+      //   });
+
+      // Axios.post('https://reqres.in/api/login', {
+      //   ...loginData
+      // })
+      // .then((result) => {
+      //   commit('loginStop', null);
+      //   resolve(result);
+      // })
+      // .catch( error => {
+      //   commit('loginStop', error.response.data.error);
+      //   reject(error);
+      // })
     });
 
   }

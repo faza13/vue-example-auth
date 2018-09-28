@@ -6,7 +6,7 @@
       <section class="login-form">
         <form @submit.prevent="loginProcess" role="login" >
           <img src="http://i.imgur.com/RcmcLv4.png" class="img-responsive" alt="" />
-          <input type="username" v-model="username" name="username" placeholder="username" required class="form-control input-lg" />
+          <input type="email" v-model="email" name="email" placeholder="Email" required class="form-control input-lg" />
           <input type="password" v-model="password" class="form-control input-lg" id="password" placeholder="Password" required="" />
           <div class="pwstrength_viewport_progress"></div>
           <button type="submit" name="go" class="btn btn-lg btn-primary btn-block">Sign in</button>
@@ -27,7 +27,7 @@ import { mapState, mapActions } from 'vuex';
 export default {
   data () {
     return {
-      username: '',
+      email: '',
       password: ''
     }
   },
@@ -38,18 +38,17 @@ export default {
       'loginSuccessful'
     ]),
   },
-
   methods: {
     // ...mapActions([
     //   'auth/doLogin'
     // ]),
     loginProcess() {
-      const auth = this.$store.dispatch('auth/doLogin', {username: this.username, password: this.password});
+      const auth = this.$store.dispatch('auth/doLogin', {email: this.email, password: this.password});
       const that = this;
       auth.then(result => {
-        this.$router.push('about');
-        console.log(this.loggingIn);
-      });
+        console.log(result);
+      })
+      .catch(err => console.log(err));
     },
   }
 };
